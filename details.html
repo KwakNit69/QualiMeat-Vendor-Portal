@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QualiMeat - Stall Details</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body class="details-body">
+
+    <header class="app-bar">
+        <button class="icon-btn" onclick="window.location.href='index.html'">← BACK</button>
+        <div class="logo">🥩 QualiMeat <span class="version">LIVE</span></div>
+        <div style="width: 60px;"></div> </header>
+
+    <main class="main-layout">
+        <section class="side-panel vendor-info-panel">
+            <div class="profile-header">
+                <div class="img-frame">
+                    <img id="stall-img" src="" alt="Stall Photo">
+                    <div class="glow-ring"></div>
+                </div>
+                <h2 id="stall-name">Loading...</h2>
+                <p id="stall-owner"></p>
+                <div class="verified-tag">✓ VERIFIED VENDOR</div>
+            </div>
+        </section>
+
+        <section class="log-container">
+            <div class="log-header">
+                <h3 class="section-title">Official Inspection Logs</h3>
+                <span class="live-indicator"><span class="dot"></span> SYNCED</span>
+            </div>
+            
+            <div id="cert-grid" class="history-list">
+                </div>
+        </section>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA2c1f9guIlAXOiDTIUKyIXF-kGfl3xgDk",
+            authDomain: "qualimeatdb.firebaseapp.com",
+            projectId: "qualimeatdb",
+            storageBucket: "qualimeatdb.firebasestorage.app",
+            messagingSenderId: "247856692336",
+            appId: "1:247856692336:web:e39f42000af793a7a308b5"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function loadData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            let rawId = urlParams.get('id');
+            if (!rawId) return;
+
+            let stallNum = rawId.split(',')[0].replace(/Stall:/i, "").trim();
+
+            try {
+                const stallSnap = await getDocs(query(collection(db, "stalls"), where("stallNumber", "==", stallNum)));
+
+                if (!stallSnap.empty) {
+                    const stallData = stallSnap.docs[0].data();
+                    document.getElementById('stall-name').innerText = stallData.vendorName;
+                    document.getElementById('stall-owner').innerText = `Stall Number: ${stallData.stallNumber}`;
+                    document.getElementById('stall-img').src = stallData.stallImageUrl;
+
+                    const inspectSnap = await getDocs(query(collection(db, "inspections"), where("stallNumber", "==", stallNum)));
+                    const grid = document.getElementById('cert-grid');
+                    grid.innerHTML = "";
+
+                    if (!inspectSnap.empty) {
+                        const history = inspectSnap.docs.map(d => ({id: d.id, ...d.data()}));
+                        history.sort((a, b) => b.timestamp.seconds - a.timestamp.seconds);
+
+                        history.forEach(inspect => {
+                            const date = inspect.timestamp.toDate().toLocaleDateString('en-PH', { month: 'long', day: 'numeric', year: 'numeric' });
+                            
+                            let html = `
+                                <div class="log-card">
+                                    <div class="card-top">
+                                        <div class="date-box">
+                                            <span class="label">DATE</span>
+                                            <span class="val">${date}</span>
+                                        </div>
+                                        <div class="inspector-box">
+                                            <span class="label">INSPECTOR</span>
+                                            <span class="val">${inspect.inspectorName}</span>
+                                        </div>
+                                    </div>
+                                    <div class="meat-grid">
+                            `;
+
+                            inspect.scanHistory.forEach(item => {
+                                const isFresh = item.label.toLowerCase() === 'fresh';
+                                html += `
+                                    <div class="meat-row">
+                                        <span class="cut-name">${item.cut}</span>
+                                        <span class="status-badge ${isFresh ? 'fresh' : 'spoiled'}">
+                                            ${item.label.toUpperCase()}
+                                        </span>
+                                    </div>
+                                `;
+                            });
+
+                            html += `</div></div>`;
+                            grid.innerHTML += html;
+                        });
+                    } else {
+                        grid.innerHTML = "<p class='empty-msg'>No inspection history found for this stall.</p>";
+                    }
+                }
+            } catch (e) { console.error(e); }
+        }
+        loadData();
+    </script>
+</body>
+</html>
