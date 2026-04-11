@@ -11,8 +11,6 @@ async function loadDetails() {
         const params = new URLSearchParams(window.location.search);
         const qrData = decodeURIComponent(params.get("id") || "").trim();
 
-        console.log("RAW QR:", qrData);
-
         if (!qrData) {
             document.getElementById("cert-grid").innerHTML =
                 `<p class="empty-msg">Invalid QR data.</p>`;
@@ -21,18 +19,16 @@ async function loadDetails() {
 
         let stallNumber = qrData;
 
-        // ✅ Supports: "143,Test Name"
+        // ✅ supports "143,Vendor Name"
         if (qrData.includes(",")) {
             stallNumber = qrData.split(",")[0].trim();
         }
 
-        // ✅ Supports: "Stall: 143"
+        // ✅ supports "Stall: 143"
         const labeledMatch = qrData.match(/stall\s*:\s*([^,]+)/i);
         if (labeledMatch) {
             stallNumber = labeledMatch[1].trim();
         }
-
-        console.log("FINAL STALL:", stallNumber);
 
         // =========================
         // GET STALL PROFILE
@@ -83,75 +79,83 @@ async function loadDetails() {
         }
 
         let logsHTML = "";
-        let spoiledSessions = 0;
-        let totalSessions = logsSnap.size;
+        let flaggedCount = 0;
+        const totalSessions = logsSnap.size;
 
-logsSnap.forEach(doc => {
-    const data = doc.data();
-    const sessionId = doc.id;
+        logsSnap.forEach(doc => {
+            const data = doc.data();
+            const sessionId = doc.id;
 
-    const date =
-        data.timestamp?.toDate().toLocaleDateString() || "Unknown";
+            const date =
+                data.timestamp?.toDate().toLocaleDateString() || "Unknown";
 
-    let rows = "";
-    let hasSpoiled = false;
+            let rows = "";
+            let hasSpoiled = false;
 
-    if (data.scanHistory) {
-        data.scanHistory.forEach(scan => {
-            if (scan.label === "Spoiled") {
-                hasSpoiled = true;
+            if (data.scanHistory) {
+                data.scanHistory.forEach(scan => {
+                    if (scan.label === "Spoiled") {
+                        hasSpoiled = true;
+                    }
+
+                    rows += `
+                        <div class="meat-row">
+                            <span>${scan.cut}</span>
+                            <span class="status-badge ${scan.label.toLowerCase()}">
+                                ${scan.label}
+                            </span>
+                        </div>
+                    `;
+                });
             }
 
-            rows += `
-                <div class="meat-row">
-                    <span>${scan.cut}</span>
-                    <span class="status-badge ${scan.label.toLowerCase()}">
-                        ${scan.label}
-                    </span>
+            if (hasSpoiled) flaggedCount++;
+
+            logsHTML += `
+                <div class="log-card"
+                     onclick="openCertificate('${sessionId}')">
+                    <div class="card-top">
+                        <div>
+                            <span class="label">DATE</span>
+                            <span class="val">${date}</span>
+                        </div>
+                        <div>
+                            <span class="label">INSPECTOR</span>
+                            <span class="val">${data.inspectorName || "N/A"}</span>
+                        </div>
+                    </div>
+                    ${rows}
                 </div>
             `;
         });
-    }
 
-    if (hasSpoiled) spoiledSessions++;
-
-    logsHTML += `
-        <div class="log-card clickable-card"
-             onclick="openCertificate('${sessionId}')">
-            <div class="card-top">
-                <div>
-                    <span class="label">DATE</span>
-                    <span class="val">${date}</span>
-                </div>
-                <div>
-                    <span class="label">INSPECTOR</span>
-                    <span class="val">${data.inspectorName || "N/A"}</span>
-                </div>
-            </div>
-            ${rows}
-        </div>
-    `;
-});
-
+        // =========================
+        // UPDATE COUNTS
+        // =========================
         document.getElementById("totalSessions").textContent =
             totalSessions;
 
         document.getElementById("flaggedSessions").textContent =
-            spoiledSessions;
+            flaggedCount;
 
-        const summary = document.getElementById("statusSummary");
+        // =========================
+        // WARNING BOX
+        // =========================
+        const warningBox = document.getElementById("warningBox");
 
-        if (spoiledSessions > 0) {
-            summary.className = "status-summary warning";
-            summary.innerHTML = `
-                <h3>⚠ Warning Status</h3>
-                <p>${spoiledSessions} flagged inspection session(s) detected.</p>
+        if (flaggedCount > 0) {
+            warningBox.innerHTML = `
+                <div class="warning-box">
+                    ⚠ Warning Status<br>
+                    ${flaggedCount} flagged inspection session(s) detected.
+                </div>
             `;
         } else {
-            summary.className = "status-summary safe";
-            summary.innerHTML = `
-                <h3>✅ Safe Vendor Status</h3>
-                <p>No spoiled meat detected in inspection history.</p>
+            warningBox.innerHTML = `
+                <div class="warning-box" style="border-color:#00E676;color:#86efac;background:rgba(0,230,118,0.08)">
+                    ✅ Safe Vendor Status<br>
+                    No spoiled sessions found in inspection history.
+                </div>
             `;
         }
 
@@ -165,7 +169,8 @@ logsSnap.forEach(doc => {
     }
 }
 
-loadDetails();
 window.openCertificate = function(sessionId) {
     window.location.href = `certificate.html?id=${sessionId}`;
 };
+
+loadDetails();
