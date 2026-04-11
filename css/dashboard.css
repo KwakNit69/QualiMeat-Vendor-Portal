@@ -1,0 +1,77 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f8fafc;
+  color: #111827;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 1.5rem 2rem;
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.logo {
+  font-weight: 800;
+  font-size: 1.2rem;
+}
+
+.logo span {
+  color: #16c47f;
+}
+
+.vendor-status {
+  font-weight: 700;
+}
+
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.summary-card,
+.certificate-card,
+.alert-card {
+  background: white;
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+  margin-bottom: 1rem;
+}
+
+.summary-card.warning {
+  border-left: 5px solid #ef4444;
+}
+
+.badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  margin: 10px 0;
+}
+
+.badge.safe {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.badge.flagged {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 12px;
+  background: #16c47f;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}

@@ -1,0 +1,144 @@
+body {
+    margin: 0;
+    padding: 40px;
+    background: #f1f5f9;
+    font-family: Arial, sans-serif;
+}
+
+.certificate-paper {
+    max-width: 1000px;
+    margin: auto;
+    background: white;
+    padding: 60px;
+    border: 2px solid #d1d5db;
+}
+
+h1 {
+    text-align: center;
+    color: #16a34a;
+    margin-bottom: 20px;
+    font-size: 2rem;
+}
+
+.sub-text {
+    text-align: center;
+    color: #475569;
+    margin-bottom: 50px;
+    line-height: 1.6;
+}
+
+.meta-line {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.cert-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 60px;
+}
+
+.cert-table th,
+.cert-table td {
+    border: 2px solid #222;
+    padding: 18px;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.cert-table th {
+    background: #f8fafc;
+}
+
+.fresh {
+    color: #16a34a;
+    font-weight: bold;
+}
+
+.spoiled {
+    color: #dc2626;
+    font-weight: bold;
+}
+
+.signature-section {
+    margin-top: 70px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.signature-box {
+    width: 320px;
+    text-align: center;
+}
+
+.signature-line {
+    width: 100%;
+    border-top: 2px solid #000;
+    margin-bottom: 12px;
+}
+
+.signature-box h3 {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+.signature-box small {
+    display: block;
+    margin-top: 6px;
+    font-size: 1rem;
+    color: #334155;
+}
+
+.footer-note {
+    margin-top: 50px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+.print-btn {
+    margin-top: 30px;
+    width: 100%;
+    padding: 16px;
+    background: #16a34a;
+    color: white;
+    border: none;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.back-btn {
+    background: #0f172a;
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: 0.2s ease;
+}
+
+.back-btn:hover {
+    background: #1e293b;
+}
+
+@media print {
+    .print-btn {
+        display: none;
+    }
+
+    body {
+        background: white;
+        padding: 0;
+    }
+
+    .certificate-paper {
+        border: none;
+    }
+}

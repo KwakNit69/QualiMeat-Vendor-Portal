@@ -3,56 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QualiMeat - Live Inspection Portal</title>
-    <link rel="stylesheet" href="index.css">
+    <title>QualiMeat Vendor Verification</title>
+    <link rel="stylesheet" href="css/scanner.css">
 </head>
 <body class="scanner-body">
 
     <header class="app-bar">
-        <div class="logo">🥩 QualiMeat <span class="version">v3.0</span></div>
-        <div class="live-indicator"><span class="dot"></span> LIVE DATABASE</div>
+        <div class="brand">
+            <div class="logo-icon">🥩</div>
+            <div>
+                <h2>QualiMeat</h2>
+                <small>Vendor Verification Portal</small>
+            </div>
+        </div>
+
+        <div class="live-indicator">
+            <span class="dot"></span>
+            Live Firestore Verification
+        </div>
     </header>
 
-    <main class="main-layout">
-        <aside class="side-panel instructions">
-            <h3>Quick Start</h3>
-            <div class="step-list">
-                <div class="step"><span class="num">1</span> <p>Locate the <strong>QR Code</strong> at the vendor's stall.</p></div>
-                <div class="step"><span class="num">2</span> <p>Position the code inside the <strong>green brackets</strong>.</p></div>
-                <div class="step"><span class="num">3</span> <p>Wait for <strong>AI Verification</strong> to complete.</p></div>
-                <div class="step"><span class="num">4</span> <p>View <strong>Full History</strong> and freshness logs.</p></div>
+    <main class="scanner-layout">
+
+        <!-- Left Info -->
+        <aside class="info-card">
+            <h3>How to Verify</h3>
+            <div class="steps">
+                <div class="step">
+                    <span>1</span>
+                    <p>Scan the QR code displayed at the stall.</p>
+                </div>
+                <div class="step">
+                    <span>2</span>
+                    <p>Or upload a saved QR image from your device.</p>
+                </div>
+                <div class="step">
+                    <span>3</span>
+                    <p>System automatically verifies inspection logs.</p>
+                </div>
+                <div class="step">
+                    <span>4</span>
+                    <p>Print official compliance certificate instantly.</p>
+                </div>
             </div>
         </aside>
 
-        <section class="scanner-core">
-            <h2 class="scan-title">Ready to Verify?</h2>
+        <!-- Scanner -->
+        <section class="scanner-card">
+            <h1>Scan Vendor QR</h1>
+            <p>Use camera or upload QR image for verification</p>
+
             <div class="scanner-frame">
                 <div id="reader"></div>
-                <div class="radar-line"></div>
-                <div class="corner tl"></div>
-                <div class="corner tr"></div>
-                <div class="corner bl"></div>
-                <div class="corner br"></div>
+                <div class="scan-overlay"></div>
             </div>
-            
+
             <div class="upload-section">
-                <p>No Camera? Upload an inspection image:</p>
-                <label for="qr-input" class="upload-btn">Upload QR Image</label>
-                <input type="file" id="qr-input" accept="image/*" style="display:none;">
+                <label for="qr-input" class="upload-btn">
+                    Upload QR Image
+                </label>
+                <input type="file" id="qr-input" accept="image/*" hidden>
             </div>
         </section>
 
-        <aside class="side-panel about">
-            <h3>System Status</h3>
-            <div class="stat-card">
-                <span class="stat-label">Security</span>
-                <span class="stat-value">End-to-End Encrypted</span>
+        <!-- Right Status -->
+        <aside class="status-card">
+            <h3>Portal Status</h3>
+
+            <div class="status-item">
+                <span>Database</span>
+                <strong>Connected</strong>
             </div>
-            <p class="about-text">QualiMeat uses real-time blockchain-style logging to ensure that meat inspection records cannot be tampered with. Every scan is a step toward a safer market.</p>
+
+            <div class="status-item">
+                <span>Security</span>
+                <strong>Encrypted</strong>
+            </div>
+
+            <div class="status-item">
+                <span>Verification</span>
+                <strong>Real-time</strong>
+            </div>
+
+            <p class="trust-note">
+                This portal verifies vendor inspection history directly
+                from official QualiMeat records.
+            </p>
         </aside>
     </main>
 
     <script src="https://unpkg.com/html5-qrcode"></script>
-    <script src="index.js"></script>
+    <script src="js/index.js"></script>
 </body>
 </html>
