@@ -1,0 +1,29 @@
+/* LIGHT MODE (Default) */
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --text-main: #333333;
+    --header-bg: #ffffff;
+    --accent: #d63031; /* That meat-red color */
+}
+
+/* DARK MODE */
+[data-theme="dark"] {
+    --bg-primary: #121212;
+    --bg-secondary: #1e1e1e;
+    --text-main: #e0e0e0;
+    --header-bg: #1f1f1f;
+    --accent: #ff7675;
+}
+
+/* Apply to the whole site */
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-main);
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.app-bar {
+    background-color: var(--header-bg);
+    border-bottom: 1px solid var(--bg-secondary);
+}

@@ -3,7 +3,8 @@ import {
     collection,
     getDocs,
     query,
-    where
+    where,
+    onSnapshot // ✅ ADDED: This is the magic real-time listener!
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 async function loadDetails() {
@@ -31,7 +32,7 @@ async function loadDetails() {
         }
 
         // =========================
-        // GET STALL PROFILE
+        // 1. GET STALL PROFILE (One-time fetch)
         // =========================
         const stallQuery = query(
             collection(db, "stalls"),
@@ -58,108 +59,119 @@ async function loadDetails() {
             stallData.stallImageUrl || "";
 
         // =========================
-        // GET INSPECTION LOGS
+        // 2. GET INSPECTION LOGS (LIVE REAL-TIME LISTENER)
         // =========================
         const logsQuery = query(
             collection(db, "inspections"),
             where("stallNumber", "==", stallNumber)
         );
 
-        const logsSnap = await getDocs(logsQuery);
-        const certGrid = document.getElementById("cert-grid");
+        // ✅ CHANGED: onSnapshot replaces getDocs. This block of code 
+        // will now automatically run EVERY TIME the database changes!
+        onSnapshot(logsQuery, (logsSnap) => {
+            const certGrid = document.getElementById("cert-grid");
 
-        if (logsSnap.empty) {
-            certGrid.innerHTML =
-                `<p class="empty-msg">No inspection logs found.</p>`;
+            if (logsSnap.empty) {
+                certGrid.innerHTML =
+                    `<p class="empty-msg">No inspection logs found.</p>`;
 
-            document.getElementById("totalSessions").textContent = 0;
-            document.getElementById("flaggedSessions").textContent = 0;
-
-            return;
-        }
-
-        let logsHTML = "";
-        let flaggedCount = 0;
-        const totalSessions = logsSnap.size;
-
-        logsSnap.forEach(doc => {
-            const data = doc.data();
-            const sessionId = doc.id;
-
-            const date =
-                data.timestamp?.toDate().toLocaleDateString() || "Unknown";
-
-            let rows = "";
-            let hasSpoiled = false;
-
-            if (data.scanHistory) {
-                data.scanHistory.forEach(scan => {
-                    if (scan.label === "Spoiled") {
-                        hasSpoiled = true;
-                    }
-
-                    rows += `
-                        <div class="meat-row">
-                            <span>${scan.cut}</span>
-                            <span class="status-badge ${scan.label.toLowerCase()}">
-                                ${scan.label}
-                            </span>
-                        </div>
-                    `;
-                });
+                document.getElementById("totalSessions").textContent = 0;
+                document.getElementById("flaggedSessions").textContent = 0;
+                
+                // Clear warning box if empty
+                document.getElementById("warningBox").innerHTML = `
+                    <div class="warning-box" style="border-color:#00E676;color:#86efac;background:rgba(0,230,118,0.08)">
+                        ✅ Safe Vendor Status<br>
+                        No spoiled sessions found in inspection history.
+                    </div>
+                `;
+                return;
             }
 
-            if (hasSpoiled) flaggedCount++;
+            let logsHTML = "";
+            let flaggedCount = 0;
+            const totalSessions = logsSnap.size;
 
-            logsHTML += `
-                <div class="log-card"
-                     onclick="openCertificate('${sessionId}')">
-                    <div class="card-top">
-                        <div>
-                            <span class="label">DATE</span>
-                            <span class="val">${date}</span>
+            logsSnap.forEach(doc => {
+                const data = doc.data();
+                const sessionId = doc.id;
+
+                const date =
+                    data.timestamp?.toDate().toLocaleDateString() || "Unknown";
+
+                let rows = "";
+                let hasSpoiled = false;
+
+                if (data.scanHistory) {
+                    data.scanHistory.forEach(scan => {
+                        if (scan.label === "Spoiled") {
+                            hasSpoiled = true;
+                        }
+
+                        rows += `
+                            <div class="meat-row">
+                                <span>${scan.cut}</span>
+                                <span class="status-badge ${scan.label.toLowerCase()}">
+                                    ${scan.label}
+                                </span>
+                            </div>
+                        `;
+                    });
+                }
+
+                if (hasSpoiled) flaggedCount++;
+
+                logsHTML += `
+                    <div class="log-card"
+                         onclick="openCertificate('${sessionId}')">
+                        <div class="card-top">
+                            <div>
+                                <span class="label">DATE</span>
+                                <span class="val">${date}</span>
+                            </div>
+                            <div>
+                                <span class="label">INSPECTOR</span>
+                                <span class="val">${data.inspectorName || "N/A"}</span>
+                            </div>
                         </div>
-                        <div>
-                            <span class="label">INSPECTOR</span>
-                            <span class="val">${data.inspectorName || "N/A"}</span>
-                        </div>
+                        ${rows}
                     </div>
-                    ${rows}
-                </div>
-            `;
+                `;
+            });
+
+            // =========================
+            // UPDATE COUNTS LIVE
+            // =========================
+            document.getElementById("totalSessions").textContent = totalSessions;
+            document.getElementById("flaggedSessions").textContent = flaggedCount;
+
+            // =========================
+            // WARNING BOX LIVE UPDATE
+            // =========================
+            const warningBox = document.getElementById("warningBox");
+
+            if (flaggedCount > 0) {
+                warningBox.innerHTML = `
+                    <div class="warning-box">
+                        ⚠ Warning Status<br>
+                        ${flaggedCount} flagged inspection session(s) detected.
+                    </div>
+                `;
+            } else {
+                warningBox.innerHTML = `
+                    <div class="warning-box" style="border-color:#00E676;color:#86efac;background:rgba(0,230,118,0.08)">
+                        ✅ Safe Vendor Status<br>
+                        No spoiled sessions found in inspection history.
+                    </div>
+                `;
+            }
+
+            // Inject the new HTML into the grid
+            certGrid.innerHTML = logsHTML;
+
+        }, (error) => {
+            console.error("Real-time listener error:", error);
         });
-
-        // =========================
-        // UPDATE COUNTS
-        // =========================
-        document.getElementById("totalSessions").textContent =
-            totalSessions;
-
-        document.getElementById("flaggedSessions").textContent =
-            flaggedCount;
-
-        // =========================
-        // WARNING BOX
-        // =========================
-        const warningBox = document.getElementById("warningBox");
-
-        if (flaggedCount > 0) {
-            warningBox.innerHTML = `
-                <div class="warning-box">
-                    ⚠ Warning Status<br>
-                    ${flaggedCount} flagged inspection session(s) detected.
-                </div>
-            `;
-        } else {
-            warningBox.innerHTML = `
-                <div class="warning-box" style="border-color:#00E676;color:#86efac;background:rgba(0,230,118,0.08)">
-                    ✅ Safe Vendor Status<br>
-                    No spoiled sessions found in inspection history.
-                </div>
-            `;
-        }
-
-        certGrid.innerHTML = logsHTML;
 
     } catch (error) {
         console.error("LOAD DETAILS ERROR:", error);

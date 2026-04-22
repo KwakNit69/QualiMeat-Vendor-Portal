@@ -197,3 +197,19 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+.logo {
+  display: flex;
+  align-items: center; /* This keeps the image and text on the same horizontal line */
+  font-size: 24px; 
+  font-weight: bold;
+  color: white;
+  white-space: nowrap; /* Prevents the text from wrapping to the next line */
+}
+
+.logo-icon {
+  width: 55px;  /* Increased from 32px to make it wider */
+  height: 55px; /* Increased from 32px to make it taller */
+  object-fit: contain; 
+  margin-right: 15px; /* Added a tiny bit more space between the big logo and the text */
+}
