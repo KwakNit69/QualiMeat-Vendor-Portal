@@ -1,0 +1,145 @@
+:root {
+    /* MAIN THEME VARIABLES (Dark by default) */
+    --primary: #00E676;
+    --bg-gradient: radial-gradient(circle at top, #1c2128 0%, #0b0e11 100%);
+    --card-bg: rgba(22, 27, 34, 0.9);
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --title-color: #ffffff;
+    --input-bg: rgba(11, 14, 17, 0.5);
+    --input-border: #30363d;
+}
+
+global-header {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    display: block; /* Custom elements are inline by default, this makes it behave like a block */
+}
+
+/* =========================================
+   GLOBAL HEADER (Locked to Dark Mode)
+   ========================================= */
+.app-bar {
+    background: rgba(11, 14, 17, 0.95) !important;
+    border-bottom: 1px solid #30363d !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    backdrop-filter: blur(10px);
+}
+
+/* =========================================
+   SKELETON LOADING ANIMATION
+   ========================================= */
+@keyframes skeleton-pulse {
+    0% { background-color: var(--border); }
+    50% { background-color: var(--input-bg); }
+    100% { background-color: var(--border); }
+}
+
+.skeleton {
+    animation: skeleton-pulse 1.5s infinite ease-in-out;
+    display: inline-block;
+}
+
+/* Specific skeleton shapes */
+.skel-img { width: 120px; height: 120px; border-radius: 50%; }
+.skel-title { width: 200px; height: 32px; border-radius: 8px; margin-bottom: 8px; }
+.skel-text { width: 120px; height: 16px; border-radius: 6px; }
+.skel-stat { width: 50px; height: 40px; border-radius: 8px; margin: 0 auto; }
+.skel-card { width: 100%; height: 130px; border-radius: 18px; }
+
+[data-theme="light"] {
+    /* LIGHT MODE (Only affects the main layout now) */
+    --bg-gradient: radial-gradient(circle at top, #f0f2f5 0%, #ffffff 100%);
+    --card-bg: rgba(255, 255, 255, 0.9);
+    --border: #d0d7de;
+    --text: #1f2328;
+    --muted: #656d76;
+    --title-color: #1f2328;
+    --input-bg: #ffffff;
+    --input-border: #d0d7de;
+}
+
+body {
+    margin: 0;
+    font-family: Inter, sans-serif;
+    background: var(--bg-gradient);
+    color: var(--text);
+    min-height: 100vh;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* =========================================
+   GLOBAL HEADER (Locked to Dark Mode)
+   ========================================= */
+.app-bar {
+    /* Hardcoded dark backgrounds so it ignores the light theme */
+    background: rgba(11, 14, 17, 0.85) !important;
+    border-bottom: 1px solid #30363d !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    backdrop-filter: blur(10px);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Hardcoded text colors so the text doesn't turn black in light mode */
+.brand h2 { margin: 0; color: var(--primary); font-size: 1.4rem; }
+.brand small { color: #8b949e !important; }
+
+/* The Back Button */
+.back-btn {
+    background: var(--primary);
+    color: #000;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.back-btn:hover {
+    opacity: 0.8;
+}
+
+/* The Toggle Button (Locked to Dark Mode styling) */
+.theme-switch {
+    background: rgba(128, 128, 128, 0.1);
+    border: 1px solid #30363d !important;
+    color: #e6edf3 !important; 
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 8px;
+    margin-left: 10px;
+    transition: 0.2s;
+}
+
+.theme-switch:hover { background: rgba(128, 128, 128, 0.2); }
+
+/* Live Indicator (Locked to Dark Mode styling) */
+.live-indicator { 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    color: #8b949e !important; 
+    font-size: 0.9rem; 
+}
+
+.dot { 
+    width: 10px; 
+    height: 10px; 
+    border-radius: 50%; 
+    background: var(--primary); 
+    box-shadow: 0 0 10px var(--primary); 
+}

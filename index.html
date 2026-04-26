@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QualiMeat Vendor Verification</title>
+    
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/scanner.css">
+    <script src="js/theme-init.js"></script>
+    <script src="js/header.js"></script>
+</head>
+<body class="scanner-body">
+
+    <global-header></global-header>
+
+    <main class="scanner-layout">
+        <aside class="info-card">
+            <h3>How to Verify</h3>
+            <div class="steps">
+                <div class="step">
+                    <span>1</span>
+                    <p>Scan the QR code displayed at the stall.</p>
+                </div>
+                <div class="step">
+                    <span>2</span>
+                    <p>Or upload a saved QR image from your device.</p>
+                </div>
+                <div class="step">
+                    <span>3</span>
+                    <p>System automatically verifies inspection logs.</p>
+                </div>
+                <div class="step">
+                    <span>4</span>
+                    <p>Print official compliance certificate instantly.</p>
+                </div>
+            </div>
+        </aside>
+
+        <section class="scanner-card">
+            <h1><center>Scan Vendor QR</center></h1>
+            <p><center>Use camera or enter ID for verification</center></p>
+
+            <div id="scanner-view">
+                <div class="scanner-frame">
+                    <div id="reader"></div>
+                    <div class="scan-overlay"></div>
+                </div>
+
+                <div class="upload-section">
+                    <label for="qr-input" class="upload-btn">
+                        Upload QR Image
+                    </label>
+                    <input type="file" id="qr-input" accept="image/*" hidden>
+                </div>
+                
+                <div class="manual-toggle-section">
+                    <button id="show-manual-btn" class="secondary-btn">Or Enter Details Manually</button>
+                </div>
+            </div>
+
+            <div id="manual-view" style="display: none;">
+                <div class="manual-form">
+                    <div class="form-group">
+                        <label>Stall Number / ID</label>
+                        <input type="text" id="stall-id" placeholder="e.g. STALL-001">
+                    </div>
+                    <div class="form-group">
+                        <label>Vendor Name (Optional)</label>
+                        <input type="text" id="vendor-name" placeholder="e.g. Juan Dela Cruz">
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button id="submit-manual-btn" class="upload-btn">Verify Vendor</button>
+                        <button id="back-to-scanner-btn" class="secondary-btn">Back to Scanner</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <aside class="status-card">
+            <h3>Portal Status</h3>
+
+            <div class="status-item">
+                <span>Database</span>
+                <strong>Connected</strong>
+            </div>
+
+            <div class="status-item">
+                <span>Security</span>
+                <strong>Encrypted</strong>
+            </div>
+
+            <div class="status-item">
+                <span>Verification</span>
+                <strong>Real-time</strong>
+            </div>
+
+            <p class="trust-note">
+                This portal verifies vendor inspection history directly
+                from official QualiMeat records.
+            </p>
+        </aside>
+    </main>
+
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="js/index.js"></script>
+    <script src="js/dashboard.js"></script> 
+</body>
+</html>

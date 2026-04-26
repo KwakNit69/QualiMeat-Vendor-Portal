@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspection Certificate</title>
+
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/certificate.css">
+    <script src="js/theme-init.js"></script>
+    <script src="js/header.js"></script>
+</head>
+<body>
+
+    <global-header back-url="javascript:history.back()"></global-header>
+
+    <div class="certificate-paper">
+
+        <h1>OFFICIAL MEAT QUALITY INSPECTION CERTIFICATE</h1>
+
+        <p class="sub-text">
+            This certifies that the listed meat products below
+            have undergone official quality verification under
+            the QualiMeat Vendor Compliance System.
+        </p>
+
+        <div class="meta-line">
+            <span><strong>Stall No:</strong> <span id="certStall"></span></span>
+            <span><strong>Vendor:</strong> <span id="certVendor"></span></span>
+            <span><strong>Date:</strong> <span id="certDate"></span></span>
+        </div>
+
+        <table class="cert-table">
+            <thead>
+                <tr>
+                    <th>Meat Cut</th>
+                    <th>Inspection Result</th>
+                </tr>
+            </thead>
+            <tbody id="certRows"></tbody>
+        </table>
+
+        <div class="signature-section">
+            <div class="signature-box">
+                <h3 id="certInspector"></h3>
+                <div class="signature-line"></div>
+                <small>Authorized Meat Inspector</small>
+            </div>
+        </div>
+
+        <div id="complianceNote"></div>
+
+        <p class="footer-note">
+            Issued under QualiMeat Smart Inspection Compliance System.
+        </p>
+
+        <button class="print-btn" onclick="window.print()">
+            🖨️ Print Certificate
+        </button>
+    </div>
+
+    <script type="module" src="js/certificate.js"></script>
+</body>
+</html>

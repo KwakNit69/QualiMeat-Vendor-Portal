@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QualiMeat - Stall Details</title>
+    
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/details.css">
+    <script src="js/theme-init.js"></script>
+    <script src="js/header.js"></script>
+</head>
+<body class="details-body">
+
+    <global-header back-url="index.html"></global-header>
+
+    <main class="details-layout">
+
+        <section class="vendor-summary-card">
+            <div class="vendor-left">
+                <img id="stall-img" src="" alt="Vendor Stall" class="skeleton skel-img" onload="this.classList.remove('skeleton')">
+                <div>
+                    <h2 id="stall-name"><div class="skeleton skel-title"></div></h2>
+                    <p id="stall-owner"><div class="skeleton skel-text"></div></p>
+                </div>
+            </div>
+
+            <div class="summary-stats">
+                <div class="stat-box">
+                    <span id="totalSessions"><div class="skeleton skel-stat"></div></span>
+                    <small>Sessions</small>
+                </div>
+                <div class="stat-box flagged">
+                    <span id="flaggedSessions"><div class="skeleton skel-stat"></div></span>
+                    <small>Flagged</small>
+                </div>
+            </div>
+        </section>
+
+        <section id="warningBox"></section>
+
+        <section class="logs-section">
+            <h3>Official Inspection Logs</h3>
+            <div id="cert-grid" class="logs-grid">
+                <div class="skeleton skel-card"></div>
+                <div class="skeleton skel-card"></div>
+                <div class="skeleton skel-card"></div>
+            </div>
+        </section>
+
+    </main>
+    
+    <script src="js/dashboard.js"></script>
+    <script type="module" src="js/certificates.js"></script>
+</body>
+</html>

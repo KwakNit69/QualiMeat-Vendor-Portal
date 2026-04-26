@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QualiMeat - Warning Center</title>
+
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/warnings.css" />
+  <script src="js/theme-init.js"></script>
+  <script src="js/header.js"></script>
+</head>
+<body>
+
+  <global-header back-url="index.html"></global-header>
+
+  <main class="warning-layout">
+    <section class="warning-summary">
+      <div class="summary-card">
+        <span>Total Flagged Sessions</span>
+        <h2 id="flagged-count">0</h2>
+      </div>
+    </section>
+
+    <section class="warning-list-section">
+      <h2>Flagged Inspection Sessions</h2>
+      <div id="warning-list" class="warning-list"></div>
+    </section>
+  </main>
+
+  <script type="module" src="js/warnings.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
