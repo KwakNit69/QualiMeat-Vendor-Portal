@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inspection Certificate</title>
+    <title>Meat Inspection Certificate</title>
 
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/certificate.css">
@@ -16,12 +16,21 @@
 
     <div class="certificate-paper">
 
-        <h1>OFFICIAL MEAT QUALITY INSPECTION CERTIFICATE</h1>
+        <!-- OFFICIAL LETTERHEAD -->
+        <div class="official-header">
+            <p>Republic of the Philippines</p>
+            <p>Province of Davao del Norte</p>
+            <p>City of Tagum</p>
+            <h3 style="margin-top: 5px;">CITY VETERINARY OFFICE</h3>
+        </div>
 
-        <p class="sub-text">
-            This certifies that the listed meat products below
-            have undergone official quality verification under
-            the QualiMeat Vendor Compliance System.
+        <h1 class="cert-title">MEAT INSPECTION CERTIFICATE</h1>
+
+        <!-- REPHRASED OFFICIAL WORDING -->
+        <p class="official-wording">
+            This certifies that the meat products described below have undergone official quality verification. 
+            At the time and date of inspection, the products cleared for display are found fit for human consumption 
+            and handled in accordance with the rules and regulations of the NMIS and the Department of Agriculture.
         </p>
 
         <div class="meta-line">
@@ -30,15 +39,22 @@
             <span><strong>Date:</strong> <span id="certDate"></span></span>
         </div>
 
+        <!-- CENSUS TABLE -->
         <table class="cert-table">
             <thead>
                 <tr>
                     <th>Meat Cut</th>
-                    <th>Inspection Result</th>
+                    <th>Total Inspected</th>
+                    <th>Fresh</th>
+                    <th style="color: #dc2626;">Spoiled</th>
                 </tr>
             </thead>
-            <tbody id="certRows"></tbody>
+            <tbody id="certRows">
+                <!-- Aggregated data will be injected here -->
+            </tbody>
         </table>
+
+        <div id="complianceNote"></div>
 
         <div class="signature-section">
             <div class="signature-box">
@@ -48,14 +64,12 @@
             </div>
         </div>
 
-        <div id="complianceNote"></div>
-
         <p class="footer-note">
-            Issued under QualiMeat Smart Inspection Compliance System.
+            Powered by QualiMeat Smart Inspection Compliance System.
         </p>
 
         <button class="print-btn" onclick="window.print()">
-            🖨️ Print Certificate
+            🖨️ Print Official Certificate
         </button>
     </div>
 

@@ -41,14 +41,40 @@
 
         <section class="logs-section">
             <h3>Official Inspection Logs</h3>
-            <div id="cert-grid" class="logs-grid">
-                <div class="skeleton skel-card"></div>
-                <div class="skeleton skel-card"></div>
-                <div class="skeleton skel-card"></div>
+            <div id="cert-grid" class="logs-list">
+                <div class="skeleton skel-card" style="height: 150px; width: 100%;"></div>
+                <div class="skeleton skel-card" style="height: 150px; width: 100%;"></div>
             </div>
         </section>
 
     </main>
+
+    <!-- EVIDENCE MODAL (Table View) -->
+    <div id="evidenceModal" class="modal-overlay hidden" onclick="closeEvidenceModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2>Inspection Evidence</h2>
+                <button class="close-modal-btn" onclick="closeEvidenceModal()">✕</button>
+            </div>
+            <p class="modal-subtitle">Visual verification from the QualiMeat AI scan.</p>
+            
+            <div class="table-responsive">
+                <table class="evidence-table">
+                    <thead>
+                        <tr>
+                            <th>Evidence Photo</th>
+                            <th>Meat Cut</th>
+                            <th>AI Result</th>
+                        </tr>
+                    </thead>
+                    <tbody id="evidenceTableBody">
+                        <!-- Table rows injected here by JS -->
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
     
     <script src="js/dashboard.js"></script>
     <script type="module" src="js/certificates.js"></script>

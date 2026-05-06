@@ -17,56 +17,75 @@ async function loadCertificate() {
 
     const data = snap.data();
 
-    document.getElementById("certInspector").textContent =
-        data.inspectorName || "N/A";
-
-    document.getElementById("certStall").textContent =
-        data.stallNumber || "-";
-
-    document.getElementById("certVendor").textContent =
-        data.vendorName || "Unknown";
-
-    document.getElementById("certDate").textContent =
-        data.timestamp?.toDate().toLocaleDateString() || "-";
+    // Populate Metadata
+    document.getElementById("certInspector").textContent = data.inspectorName || "N/A";
+    document.getElementById("certStall").textContent = data.stallNumber || "-";
+    document.getElementById("certVendor").textContent = data.vendorName || "Unknown";
+    
+    // Format Date
+    const dateObj = data.timestamp ? data.timestamp.toDate() : new Date();
+    document.getElementById("certDate").textContent = dateObj.toLocaleDateString();
 
     let hasSpoiled = false;
+    let aggregated = {};
 
-    document.getElementById("certRows").innerHTML =
-        data.scanHistory.map(scan => {
-            if (scan.label === "Spoiled") hasSpoiled = true;
+    // 🔥 CENSUS LOGIC: Group scans by cut type
+    if (data.scanHistory) {
+        data.scanHistory.forEach(scan => {
+            const cut = scan.cut || "Unknown Cut";
+            if (!aggregated[cut]) {
+                aggregated[cut] = { total: 0, fresh: 0, spoiled: 0 };
+            }
+            
+            aggregated[cut].total++;
+            
+            if (scan.label === "SPOILED") {
+                aggregated[cut].spoiled++;
+                hasSpoiled = true;
+            } else {
+                aggregated[cut].fresh++;
+            }
+        });
+    }
 
-            return `
-                <tr>
-                    <td>${scan.cut}</td>
-                    <td class="${scan.label.toLowerCase()}">
-                        ${scan.label}
-                    </td>
-                </tr>
-            `;
-        }).join("");
+    // Build the summary table rows
+    let rowsHTML = "";
+    for (const [cut, stats] of Object.entries(aggregated)) {
+        rowsHTML += `
+            <tr>
+                <td style="font-weight: bold;">${cut}</td>
+                <td>${stats.total}</td>
+                <td class="fresh">${stats.fresh}</td>
+                <td class="spoiled">${stats.spoiled}</td>
+            </tr>
+        `;
+    }
 
+    // Fallback if no scans
+    if (rowsHTML === "") {
+        rowsHTML = `<tr><td colspan="4">No items scanned.</td></tr>`;
+    }
+
+    document.getElementById("certRows").innerHTML = rowsHTML;
+
+    // Compliance Note
     const note = document.getElementById("complianceNote");
-
     if (hasSpoiled) {
         note.innerHTML = `
             <div class="compliance-note warning">
-                <strong>Compliance Notice:</strong><br>
-                Any meat item marked as <strong>Spoiled</strong> must be
-                <strong>condemned and disposed of immediately</strong>
-                in accordance with food safety regulations.
+                <strong>Notice of Condemnation:</strong><br>
+                Spoiled meat items detected during this inspection must be immediately removed 
+                from the display and disposed of according to standard sanitary protocols.
             </div>
         `;
     } else {
         note.innerHTML = `
             <div class="compliance-note safe">
-                <strong>Inspection Result:</strong><br>
-                All inspected meat products passed freshness standards
-                and are cleared for vendor display.
+                <strong>Clearance:</strong><br>
+                All inspected items passed visual quality parameters and are cleared for retail display.
             </div>
         `;
     }
 }
-
-
 
 loadCertificate();
