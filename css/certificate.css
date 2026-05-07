@@ -1,11 +1,12 @@
 /* 1. Sized exactly for A5 Landscape (Half-A4 Wide) */
 .certificate-paper {
     width: 780px; 
-    min-height: 500px; 
-    margin: 20px auto; 
+    min-height: auto; 
+    margin: 15px auto; 
     background: white;
     color: #111827; 
-    padding: 25px 40px; /* Tight vertical padding, generous horizontal */
+    /* 🔥 Squeezed the top and bottom padding from 25px to 15px */
+    padding: 15px 40px; 
     border: 1px solid #d1d5db;
     box-sizing: border-box;
     font-family: Arial, sans-serif; 
@@ -15,7 +16,7 @@
 .official-header {
     text-align: center;
     line-height: 1.1;
-    margin-bottom: 12px;
+    margin-bottom: 8px; /* Tightened */
 }
 .official-header p {
     margin: 0;
@@ -30,43 +31,44 @@
 .cert-title {
     text-align: center;
     color: #000;
-    margin-bottom: 12px;
-    font-size: 1.1rem; 
+    margin-bottom: 8px; /* Tightened */
+    font-size: 1.05rem; 
     font-weight: bold;
     text-decoration: underline;
 }
 
 .official-wording {
     text-align: justify;
-    line-height: 1.35; 
-    margin-bottom: 15px; /* Tightened */
-    font-size: 0.8rem; 
+    line-height: 1.25; /* Tightened line height */
+    margin-bottom: 10px; /* Tightened */
+    font-size: 0.75rem; 
     text-indent: 25px;
 }
 
 .meta-line {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 12px; /* Tightened */
+    margin-bottom: 8px; /* Tightened */
     font-size: 0.85rem;
     font-weight: bold;
     color: #000;
 }
 
-/* TABLE - OPTIMIZED FOR 6 COLUMNS & 4 ROWS */
+/* TABLE - OPTIMIZED FOR MORE ROWS */
 .cert-table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 15px; 
-    table-layout: fixed; /* 🔥 Forces 6 columns to fit evenly without stretching */
+    margin-bottom: 10px; /* Tightened */
+    table-layout: fixed; 
 }
 
 .cert-table th,
 .cert-table td {
     border: 1px solid #000;
-    padding: 6px 4px; /* Thin vertical padding to ensure 4 rows fit easily */
+    /* 🔥 Crushed the vertical padding to 3px so 5-6 rows easily fit */
+    padding: 3px 4px; 
     text-align: center;
-    font-size: 0.75rem; /* Small enough for 6 columns */
+    font-size: 0.75rem; 
     word-wrap: break-word;
 }
 
@@ -77,11 +79,11 @@
 
 /* COMPLIANCE WARNING BOXES */
 .compliance-note {
-    padding: 10px 15px;
+    padding: 8px 12px; /* Tightened inside padding */
     border-radius: 6px;
-    line-height: 1.3;
-    font-size: 0.8rem; 
-    margin-bottom: 15px;
+    line-height: 1.2; /* Tightened text gap */
+    font-size: 0.75rem; 
+    margin-bottom: 10px; /* Tightened */
 }
 
 .compliance-note.warning {
@@ -96,12 +98,14 @@
     color: #166534;
 }
 
-/* SIGNATURE (Moved to bottom right) */
+/* SIGNATURE */
 .signature-section {
     display: flex;
-    justify-content: flex-end; /* 🔥 Pushes the single signature to the right side */
-    margin-top: 20px; 
+    justify-content: flex-end; 
+    margin-top: 15px; /* Tightened */
     color: #000;
+    /* 🔥 This tells the printer NEVER to slice this block in half! */
+    page-break-inside: avoid; 
 }
 
 .signature-box {
@@ -111,7 +115,7 @@
 
 .signature-box h3 {
     margin: 0;
-    font-size: 0.9rem;
+    font-size: 0.85rem; /* Slightly smaller name */
     font-weight: bold;
     text-transform: uppercase;
 }
@@ -119,24 +123,24 @@
 .signature-line {
     width: 100%;
     border-top: 1px solid #000;
-    margin: 5px 0;
+    margin: 4px 0; /* Tightened */
 }
 
 .signature-box small {
     display: block;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
 }
 
 /* FOOTER & BUTTON */
 .footer-note {
-    margin-top: 20px;
+    margin-top: 15px; /* Tightened */
     text-align: center;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     color: #6b7280;
 }
 
 .print-btn {
-    margin-top: 20px;
+    margin-top: 15px;
     width: 100%;
     padding: 10px;
     background: #16a34a;
@@ -149,10 +153,9 @@
 
 /* --- PRINTING RULES --- */
 @media print {
-    /* 🔥 Forces A5 Landscape (Half-page wide) */
     @page { 
         size: A5 landscape; 
-        margin: 8mm; /* Very small margins to ensure it all fits on one page */
+        margin: 5mm; /* Minimum possible margin to save space */
     }
     body { background: white; padding: 0; margin: 0; }
     global-header, .print-btn { display: none !important; }
